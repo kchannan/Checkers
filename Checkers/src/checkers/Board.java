@@ -1,21 +1,35 @@
 package checkers;
 
-import java.awt.GridLayout;
+import java.awt.*;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Board extends JFrame {
-	
-	//private GridLayout boardLayout = new GridLayout(0,8,0,0);
-	JPanel theBoard = new JPanel();
+import checkers.Checker.CheckerType;
 
-	
-	public Board(){
-		this.setTitle("Checkers");
-		
+public class Board extends JPanel {
+
+	Checker[][] checkerSet = new Checker[8][8];
+	GridBagConstraints gbc = new GridBagConstraints();
+
+	public Board() {
+		setLayout(new GridBagLayout());
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				if ((row + col) % 2 == 0) {
+					checkerSet[row][col] = new Checker(CheckerType.BLANK);
+					checkerSet[row][col].setBackground(Color.lightGray);
+					gbc.gridx = row;
+					gbc.gridy = col;
+
+				} else {
+					checkerSet[row][col] = new Checker(CheckerType.BLANK);
+					checkerSet[row][col].setBackground(Color.gray);
+					gbc.gridx = row;
+					gbc.gridy = col;
+				}
+				add(checkerSet[row][col], gbc);
+
+			}
+		}
 	}
-	
-	
-	
 }
