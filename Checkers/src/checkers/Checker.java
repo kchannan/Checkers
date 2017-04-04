@@ -3,14 +3,14 @@ package checkers;
 import java.awt.Color;
 import java.awt.Dimension;
 
-
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
-
 
 public class Checker extends JButton {
 
-	
+	ImageIcon RedImg = new ImageIcon(this.getClass().getResource("RedChecker.png"));
+	ImageIcon BlackImg = new ImageIcon(this.getClass().getResource("BlackChecker.png"));
+
 	public enum CheckerType {
 		RED, RED_KING, BLACK, BLACK_KING, BLANK;
 	}
@@ -24,12 +24,11 @@ public class Checker extends JButton {
 		this.checkerType = checkerType;
 		switch (checkerType) {
 		case RED:
-
-			this.setBackground(Color.RED);
+			this.setIcon(RedImg);
 
 			break;
 		case BLACK:
-			this.setBackground(Color.BLACK);
+			this.setIcon(BlackImg);
 
 			break;
 		case BLANK:
