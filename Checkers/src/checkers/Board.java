@@ -22,6 +22,9 @@ public class Board extends JPanel implements ActionListener {
 
 	public Board() {
 		setLayout(new GridBagLayout());
+		theBlank.setBackground(Color.lightGray);
+		theRed.setBackground(Color.lightGray);
+		theBlack.setBackground(Color.lightGray);
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if ((row + col) % 2 == 0) {
@@ -54,75 +57,148 @@ public class Board extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		Checker checkerPressed = (Checker) e.getSource();
-
+		Checker theBlank = new Checker(CheckerType.BLANK);
+		Checker theRed = new Checker(CheckerType.RED);
+		Checker theBlack = new Checker(CheckerType.BLACK);
+		theBlank.addActionListener(this);
+		theRed.addActionListener(this);
+		theBlack.addActionListener(this);
 		if (whoseTurn == 0) {
 			if (turnInProgress == false) {
 
 				if (checkerPressed.isBlack()) {
 
-					checkerPressed.setBackground(Color.yellow);
+					checkerPressed.setActivePiece();
 					temp = checkerPressed;
 					turnInProgress = true;
 				} else {
 					if (checkerPressed.isRed() || checkerPressed.isBlank()) {
-						System.out.print("It's Black's turn, please select a Black piece to move.");
+						System.out.println("It's Black's turn, please select a Black piece to move.");
+
 					}
 
 				}
 			} else {
 				if (checkerPressed.isBlack() || checkerPressed.isRed()) {
-					System.out.print("That's not a legal move, silly!");
+					System.out.println("Pressed other piece");
+					temp.unactivatePiece();
+					turnInProgress = false;
 				} else {
 					if (checkerPressed.getYPosition() == temp.getYPosition() - 1) {
 						if ((checkerPressed.getXPosition() == temp.getXPosition() - 1)
 								|| (checkerPressed.getXPosition() == temp.getXPosition() + 1)) {
-							
+
 							Checker movedTo = checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()];
 							Checker movedFrom = checkerSet[temp.getYPosition()][temp.getXPosition()];
+							// checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()]
+							// = new Checker(CheckerType.BLACK);
+							// checkerSet[temp.getYPosition()][temp.getXPosition()]
+							// = new Checker(CheckerType.BLANK);
+
 							theBlank.setBackground(Color.lightGray);
-							
-							GridBagLayout layout = (GridBagLayout)getLayout();
+
+							GridBagLayout layout = (GridBagLayout) getLayout();
 							GridBagConstraints gbc = layout.getConstraints(movedTo);
+							
 							remove(movedTo);
-							add(new Checker(CheckerType.BLACK), gbc);
+							
+							add(theBlack, gbc);
+
+							gbc = layout.getConstraints(movedFrom);
+							remove(movedFrom);
+							add(theBlank, gbc);
 							revalidate();
 							repaint();
-						    gbc = layout.getConstraints(movedFrom);
-						    remove(movedFrom);
-						    add(theBlank, gbc);
-						 	revalidate();
-							repaint();
-						    
-							
-							
-							
-						//	checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()] = temp; 
-							
-							
-						
-							
-							System.out.print("Legal move");
+							checkerSet[temp.getYPosition()][temp.getXPosition()].addActionListener(this);
+							checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()].addActionListener(this);
+
+							System.out.println("Legal move");
 							turnInProgress = false;
 							whoseTurn = 1;
 						} else
-							System.out.print("Not a legal move!");
+							System.out.println("Not a legal move! Wrong X");
+						temp.unactivatePiece();
+						turnInProgress = false;
+
 					} else {
-						System.out.print("Not a legal move!");
+						System.out.println("Not a legal move! Wrong Y");
+						temp.unactivatePiece();
+						turnInProgress = false;
 					}
 
 				}
 
 			}
-			/*
-			 * if(temp.isRed()) {
-			 * System.out.print("You clicked a red at X = "+temp.getXPosition()
-			 * +", Y = "+ temp.getYPosition()); } else if(temp.isBlack()) {
-			 * System.out.print("You clicked a black"); } else if
-			 * (temp.isBlank()){ System.out.print("You clicked a blank"); }
-			 */
 
+		} else if (whoseTurn == 1) {
+			if (turnInProgress == false) {
+
+				if (checkerPressed.isRed()) {
+
+					checkerPressed.setActivePiece();
+					temp = checkerPressed;
+					turnInProgress = true;
+				} else {
+					if (checkerPressed.isBlack() || checkerPressed.isBlank()) {
+						System.out.println("It's Black's turn, please select a Black piece to move.");
+
+					}
+
+				}
+			} else {
+				if (checkerPressed.isBlack() || checkerPressed.isRed()) {
+					System.out.println("Not a valid Move!");
+					temp.unactivatePiece();
+					turnInProgress = false;
+				} else {
+					if (checkerPressed.getYPosition() == temp.getYPosition() + 1) {
+						if ((checkerPressed.getXPosition() == temp.getXPosition() - 1)
+								|| (checkerPressed.getXPosition() == temp.getXPosition() + 1)) {
+
+							Checker movedTo = checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()];
+							Checker movedFrom = checkerSet[temp.getYPosition()][temp.getXPosition()];
+							// checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()]
+							// = new Checker(CheckerType.RED);
+							// checkerSet[temp.getYPosition()][temp.getXPosition()]
+							// = new Checker(CheckerType.BLANK);
+							
+							System.out.println(checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()].getXPosition());
+							System.out.println(checkerSet[temp.getYPosition()][temp.getXPosition()].getXPosition());
+							theBlank.setBackground(Color.lightGray);
+
+							GridBagLayout layout = (GridBagLayout) getLayout();
+							GridBagConstraints gbc = layout.getConstraints(movedTo);
+							remove(movedTo);
+							add(theRed, gbc);
+							revalidate();
+							repaint();
+
+							gbc = layout.getConstraints(movedFrom);
+							remove(movedFrom);
+							add(theBlank, gbc);
+							revalidate();
+							repaint();
+							checkerSet[temp.getYPosition()][temp.getXPosition()].addActionListener(this);
+							checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()].addActionListener(this);
+							System.out.println("Legal move");
+							turnInProgress = false;
+							whoseTurn = 0;
+						} else
+							System.out.println("Not a legal move! Try again.");
+						temp.unactivatePiece();
+						turnInProgress = false;
+
+					} else {
+						System.out.println("Not a legal move! Try again.");
+						temp.unactivatePiece();
+						turnInProgress = false;
+					}
+
+				}
+
+			}
 		}
 
 	}
-	
+
 }
