@@ -54,10 +54,11 @@ public class Board extends JPanel implements ActionListener {
 			}
 		}
 	}
+	
 
 	public void actionPerformed(ActionEvent e) {
 		Checker checkerPressed = (Checker) e.getSource();
-		Checker theBlank = new Checker(CheckerType.BLANK);
+        Checker theBlank = new Checker(CheckerType.BLANK);
 		Checker theRed = new Checker(CheckerType.RED);
 		Checker theBlack = new Checker(CheckerType.BLACK);
 		theBlank.addActionListener(this);
@@ -70,6 +71,7 @@ public class Board extends JPanel implements ActionListener {
 
 					checkerPressed.setActivePiece();
 					temp = checkerPressed;
+
 					turnInProgress = true;
 				} else {
 					if (checkerPressed.isRed() || checkerPressed.isBlank()) {
@@ -88,29 +90,27 @@ public class Board extends JPanel implements ActionListener {
 						if ((checkerPressed.getXPosition() == temp.getXPosition() - 1)
 								|| (checkerPressed.getXPosition() == temp.getXPosition() + 1)) {
 
-							Checker movedTo = checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()];
-							Checker movedFrom = checkerSet[temp.getYPosition()][temp.getXPosition()];
-							// checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()]
-							// = new Checker(CheckerType.BLACK);
-							// checkerSet[temp.getYPosition()][temp.getXPosition()]
-							// = new Checker(CheckerType.BLANK);
-
+							theBlack.setXY(checkerPressed.getXPosition(), checkerPressed.getYPosition());
+							theBlank.setXY(temp.getXPosition(), temp.getYPosition());
+							checkerSet[theBlack.getXPosition()][theBlack.getYPosition()] = theBlack;
+							checkerSet[theBlank.getXPosition()][theBlank.getYPosition()] = theBlank;
 							theBlank.setBackground(Color.lightGray);
-
+							
+							//moves the piece being moved to the empty space
 							GridBagLayout layout = (GridBagLayout) getLayout();
-							GridBagConstraints gbc = layout.getConstraints(movedTo);
-							
-							remove(movedTo);
-							
+							GridBagConstraints gbc = layout.getConstraints(checkerPressed);
+							remove(checkerPressed);
 							add(theBlack, gbc);
-
-							gbc = layout.getConstraints(movedFrom);
-							remove(movedFrom);
+							
+							//removes the piece being moved
+							gbc = layout.getConstraints(temp);
+							remove(temp);
 							add(theBlank, gbc);
 							revalidate();
 							repaint();
 							checkerSet[temp.getYPosition()][temp.getXPosition()].addActionListener(this);
-							checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()].addActionListener(this);
+							checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()]
+									.addActionListener(this);
 
 							System.out.println("Legal move");
 							turnInProgress = false;
@@ -122,6 +122,8 @@ public class Board extends JPanel implements ActionListener {
 
 					} else {
 						System.out.println("Not a legal move! Wrong Y");
+						System.out.println(temp.getXPosition());
+						System.out.println(temp.getYPosition());
 						temp.unactivatePiece();
 						turnInProgress = false;
 					}
@@ -140,7 +142,7 @@ public class Board extends JPanel implements ActionListener {
 					turnInProgress = true;
 				} else {
 					if (checkerPressed.isBlack() || checkerPressed.isBlank()) {
-						System.out.println("It's Black's turn, please select a Black piece to move.");
+						System.out.println("It's Red's turn, please select a Red piece to move.");
 
 					}
 
@@ -155,31 +157,26 @@ public class Board extends JPanel implements ActionListener {
 						if ((checkerPressed.getXPosition() == temp.getXPosition() - 1)
 								|| (checkerPressed.getXPosition() == temp.getXPosition() + 1)) {
 
-							Checker movedTo = checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()];
-							Checker movedFrom = checkerSet[temp.getYPosition()][temp.getXPosition()];
-							// checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()]
-							// = new Checker(CheckerType.RED);
-							// checkerSet[temp.getYPosition()][temp.getXPosition()]
-							// = new Checker(CheckerType.BLANK);
-							
-							System.out.println(checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()].getXPosition());
-							System.out.println(checkerSet[temp.getYPosition()][temp.getXPosition()].getXPosition());
 							theBlank.setBackground(Color.lightGray);
-
+							theRed.setXY(checkerPressed.getXPosition(), checkerPressed.getYPosition());
+							theBlank.setXY(temp.getXPosition(), temp.getYPosition());
+							checkerSet[theRed.getXPosition()][theRed.getYPosition()] = theRed;
+							checkerSet[theBlank.getXPosition()][theBlank.getYPosition()] = theBlank;
 							GridBagLayout layout = (GridBagLayout) getLayout();
-							GridBagConstraints gbc = layout.getConstraints(movedTo);
-							remove(movedTo);
+							GridBagConstraints gbc = layout.getConstraints(checkerPressed);
+							remove(checkerPressed);
 							add(theRed, gbc);
 							revalidate();
 							repaint();
 
-							gbc = layout.getConstraints(movedFrom);
-							remove(movedFrom);
+							gbc = layout.getConstraints(temp);
+							remove(temp);
 							add(theBlank, gbc);
 							revalidate();
 							repaint();
 							checkerSet[temp.getYPosition()][temp.getXPosition()].addActionListener(this);
-							checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()].addActionListener(this);
+							checkerSet[checkerPressed.getYPosition()][checkerPressed.getXPosition()]
+									.addActionListener(this);
 							System.out.println("Legal move");
 							turnInProgress = false;
 							whoseTurn = 0;
