@@ -10,14 +10,15 @@ public class Checker extends JButton {
 
 	ImageIcon RedImg = new ImageIcon(this.getClass().getResource("RedChecker.png"));
 	ImageIcon BlackImg = new ImageIcon(this.getClass().getResource("BlackChecker.png"));
-
+	ImageIcon BlackKImg = new ImageIcon(this.getClass().getResource("BlackCheckerKing.png"));
+	ImageIcon RedKImg = new ImageIcon(this.getClass().getResource("RedCheckerKing.png"));
 	public enum CheckerType {
 		RED, RED_KING, BLACK, BLACK_KING, BLANK;
 	}
 
 	private String color;
-	private int x;
-	private int y;
+	private int row;
+	private int col;
 
 	public boolean isRed() {
 		if (this.color == "Red")
@@ -41,17 +42,17 @@ public class Checker extends JButton {
 			return false;
 	}
 
-	public int getXPosition() {
-		return this.x;
+	public int getRow() {
+		return this.row;
 	}
 
-	public int getYPosition() {
-		return this.y;
+	public int getCol() {
+		return this.col;
 	}
 
-	public void setXY(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public void setRowCol(int row, int col) {
+		this.row = row;
+		this.col = col;
 	}
 
 	public void setActivePiece() {
@@ -85,7 +86,20 @@ public class Checker extends JButton {
 			this.color = "Blank";
 			this.setBackground(Color.lightGray);
 			break;
+		case RED_KING:
+			this.setIcon(RedKImg);
+			this.color = "Red";
+			this.setBackground(Color.lightGray);
+			break;
+		case BLACK_KING: 
+			this.setIcon(BlackKImg);
+			this.color = "Black";
+			this.setBackground(Color.lightGray);
+			break;
+			
 		}
+	
+			
 
 		setPreferredSize(new Dimension(50, 50));
 	}
