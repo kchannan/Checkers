@@ -71,9 +71,6 @@ public class Board extends JPanel implements ActionListener {
 			return false;
 	}
 
-	public void doMove(Checker first, Checker second) {
-
-	}
 
 	public void actionPerformed(ActionEvent e) {
 		
